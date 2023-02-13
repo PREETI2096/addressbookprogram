@@ -19,130 +19,106 @@ public class AddressBook {
 
 	// method For Adding Multiple Address Book
 	public static void multipleAddressBook(AddressBook addressBook) {
-		System.out.println(
-				"Select the Choice:\n1. Add Address Book \n2.Search Contact by State\n3. Search Contact by City\n4. Count by City\n5. Count by State\n6. Sorted Contacts\n7. exit");
-		int ch = sc.nextInt();
-		switch (ch) {
-		case 1:
-			int selection;
-			do {
-				System.out.println("Enter Name For Address Book");
-				String AddressBookName = sc.next();
-//                contactsDetails.add(AddressBookName);
-				if (hashmap.containsKey(AddressBookName)) {
-					System.out.println("The AddressBook already contains");
-					break;
-				} else {
-					ArrayList<Contact> contactDetails1 = new ArrayList<>();
-					addressBook.menuChoose(addressBook, contactDetails1);
-					hashmap.put(AddressBookName, contactDetails1);
-				}
-				System.out.println("AddressBook Added" + hashmap + " ");
-				System.out.println("1. Add New Address Book \n2. Search Contact by State\n3. Search Contact by City\n4. Count by City\n5. Count by State\n6. Sorted Contacts\n7. exit ");
-				selection = sc.nextInt();
-			} while (selection == 1);
-		case 2:
-			System.out.println("Enter City or State name to search ");
-			String name = sc.next();
-			SearchInMultipleBook(name);
-			break;
-		case 3:
-			addressBook.searchByState();
-			break;
-		case 4:
-			addressBook.searchByCity();
-			break;
-		case 5:
-			addressBook.countByCity();
-			break;
-		case 6:
-			addressBook.countByState();
-			break;
-		case 7:
-			System.out.println("Sorted Contacts Alphabetically:");
-			addressBook.sortConatct(hashmap);
-			break;
-		default:
-		}
-	}
+		int select = 0;
+        do {
+            System.out.println("1) Add Address Book \n2)Search \n3)Display Address book \n4) countPersonFromSame_City_State \n5) Sorted Contacts");
+            System.out.println("choice");
+            int ch = sc.nextInt();
+            switch (ch) {
+                case 1:
+                    int ans;
+                    do {
+                        System.out.println("Enter Name For Address Book");
+                        String AddressBookName = sc.next();
+                        if (hashmap.containsKey(AddressBookName)) {
+                            System.out.println("The AddressBook already contains");
+                            break;
+                        } else {
+                            ArrayList<Contact> contactDetails1 = new ArrayList<>();
+                            addressBook.menuChoose(addressBook, contactDetails1);
+                            hashmap.put(AddressBookName, contactDetails1);
+                        }
+                        System.out.println("AddressBook Added" + hashmap + " ");
+                        System.out.println("do you want to create another address book if press 1.");
+                        ans = sc.nextInt();
+                    } while (ans == 1);
+                    break;
+                case 2:
+                    System.out.println("Enter name to search ");
+                    String name = sc.next();
+                    SearchInMultipleBook(name);
+                    break;
+                case 3:
+                    addressBook.displayAddressBook();
+                    break;
+                case 4:
+                    System.out.println("Enter city name or state name to Count Persons belonging from same city or state");
+                    String countname = sc.next();
+                    countFromSame_City_State(countname);
+                    break;
+                case 5:
+                    System.out.println("Sorted Contacts are alphabetically :- ");
+                    sortContact(hashmap);
+                default:
+            }System.out.println("if you do not want to create multiple address book press 1.");
+            select = sc.nextInt();
+        }while (select == 1);
+    }
 
-	// Search person in a Multiple Address book.
-	private static List<Contact> SearchInMultipleBook(String name) {
-		for (Map.Entry<String, ArrayList<Contact>> entry : hashmap.entrySet()) {
-			for (Contact contacts : entry.getValue()) {
-				if (contacts.getCity().equals(name) || contacts.getState().equals(name)) {
-					System.out.println("\nAddress Book Name :" + entry.getKey());
-					System.out.println("First Name :" + contacts.getFirstName());
-					System.out.println("Last Name :" + contacts.getLastName());
-					System.out.println("Email-ID :" + contacts.getEmailID());
-					System.out.println("Address :" + contacts.getAddress());
-					System.out.println("City Name :" + contacts.getCity());
-					System.out.println("Contact Number :" + contacts.getPhoneNumber());
-				}
-			}
-		}
-		System.out.printf("No record found:");
-		return null;
-	}
+    private static List<Contact> SearchInMultipleBook(String name) {
+        for (Map.Entry<String, ArrayList<Contact>> entry : hashmap.entrySet()) {
+            for (Contact contacts1 : entry.getValue()) {
+                if (contacts1.getCity().equals(name) || contacts1.getState().equals(name)) {
+                    System.out.println("\nAddress Book Name :" + entry.getKey());
+                    System.out.println("First Name :" + contacts1.getFirstName());
+                    System.out.println("Last Name :" + contacts1.getLastName());
+                    System.out.println("Mail-ID :" + contacts1.getEmailID());
+                    System.out.println("Address :" + contacts1.getAddress());
+                    System.out.println("City Name :" + contacts1.getCity());
+                    System.out.println("Contact Number :" + contacts1.getPhoneNumber());
+                }
+            }
+        }
+        System.out.printf("No record found:");
+        return null;
+    }
+    public void SearchInSingleBook(ArrayList<Contact> contactdetails){
+        System.out.println("Enter name of city or state to search");
+        String name=sc.next();
+        ArrayList<Contact> contacts=new ArrayList<>();
+        for (Contact contact:contactdetails){
+            if(contact.getCity().equals(name)||contact.getState().equals(name))
+            {
+                contacts.add(contact);
+            }
+            System.out.println(contact);
+        }
+    }
+    //Counting how many persons belonging from same city or state
 
-	public void SearchInSingleBook(ArrayList<Contact> contactdetails) {
-		System.out.println("Enter name of city or state to search");
-		String name = sc.next();
-		ArrayList<Contact> contacts = new ArrayList<>();
-		for (Contact contact : contactdetails) {
-			if (contact.getCity().equals(name) || contact.getState().equals(name)) {
-				contacts.add(contact);
-			}
-			System.out.println(contact);
-		}
-	}
-
-	// Using Java Stream
-	public void searchByCity() {
-		System.out.println("Enter the city:");
-		String city = sc.next();
-		contactDetails.stream().filter(contacts -> contacts.getCity().equalsIgnoreCase(city))
-				.forEach(contacts -> System.out.println(contacts));
-	}
-
-	public void searchByState() {
-		System.out.println("Enter the State:");
-		String state = sc.next();
-		contactDetails.stream().filter(contacts -> contacts.getState().equalsIgnoreCase(state))
-				.forEach(contacts -> System.out.println(contacts));
-	}
-
-	public void countByCity() {
-		System.out.println("Enter the city Name:");
-		String city = sc.next();
-		contactDetails.stream().filter(contacts -> contacts.getCity().equalsIgnoreCase(city))
-				.forEach(contacts -> System.out.println(contacts));
-		long count = contactDetails.stream().filter(n -> n.getCity().equalsIgnoreCase(city)).count();
-		System.out.println("Total number of Persons in city " + city + ":" + count);
-	}
-
-	public void countByState() {
-		System.out.println("Enter the State Name:");
-		String state = sc.next();
-		contactDetails.stream().filter(contacts -> contacts.getState().equalsIgnoreCase(state))
-				.forEach(contacts -> System.out.println(contacts));
-		long count = contactDetails.stream().filter(n -> n.getState().equalsIgnoreCase(state)).count();
-		System.out.println("Total number of Persons in city " + state + ":" + count);
-	}
-
-	public static void sortConatct(HashMap<String, ArrayList<Contact>> multipleAddressBook) {
-		for (Map.Entry<String, ArrayList<Contact>> personSorted : multipleAddressBook.entrySet()) {
-			List<Contact> sortedContacts;
-			sortedContacts = personSorted.getValue().stream()
-					.sorted(Comparator.comparing(contacts -> contacts.getFirstName() + contacts.getLastName()))
-					.collect(Collectors.toList());
-			System.out.println("Sorted Contacts By Name : ");
-			for (Contact item : sortedContacts) {
-				System.out.println(item.toString());
-			}
-		}
-	}
-
+    public static List<Contact> countFromSame_City_State(String name){
+        int count=0;
+        for (Map.Entry<String, ArrayList<Contact>> entry : hashmap.entrySet()){
+            for (Contact v:entry.getValue()){
+                if (v.getCity().equals(name)|| v.getState().equals(name)){
+                    count++;
+                }
+            }
+        }
+        System.out.printf(count+"\t\nPersons belonging From =>"+name+ " \n");
+        return null;
+    }
+    public static void sortContact(HashMap<String, ArrayList<Contact>> multipleAddressBook) {
+        for(Map.Entry<String,ArrayList<Contact>> personSorted : multipleAddressBook.entrySet()){
+            List<Contact> sortedContacts;
+            sortedContacts = personSorted.getValue().stream().sorted(Comparator.comparing(contacts -> contacts.getFirstName() + contacts.getLastName())).collect(Collectors.toList());
+            System.out.println("Sorted Contacts By Name : ");
+            for (Contact item : sortedContacts){
+                System.out.println(item.toString());
+            }
+        }
+    }
+		
 	/*
 	 * Create addDetails method create info contact Class object
 	 */
@@ -207,7 +183,15 @@ public class AddressBook {
 			System.out.println("---------------------------");
 		}
 	}
-
+	  public static void displayAddressBook() {
+	        for (Map.Entry<String, ArrayList<Contact>> entry : hashmap.entrySet())
+	            for (Contact v : entry.getValue()) {
+	                System.out.println("\n Address Book=>" + entry.getKey());
+	                System.out.println("FirstName \t LastName \t Email \t Contact Number \t Address \t City \t State \t Zip Code ");
+	                System.out.println(v.getFirstName() + "\t" + v.getLastName() + "\t" + v.getEmailID() + "\t" + v.getPhoneNumber() + "\t" + v.getAddress() +
+	                        "\t" + v.getCity() + "\t" + v.getState() + "\t" + v.getZip());
+	            }
+	    }
 	/*
 	 * Another method is to create editDetails Edit details you want to editing in
 	 * the respective information by using switch case
