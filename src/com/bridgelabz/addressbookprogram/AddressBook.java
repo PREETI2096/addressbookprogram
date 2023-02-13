@@ -17,53 +17,88 @@ public class AddressBook {
 
 	// method For Adding Multiple Address Book
 	public static void multipleAddressBook(AddressBook addressBook) {
-		System.out.println("Select the Choice:\n1. Add Address Book \n2. Search City or State.");
-        int ch = sc.nextInt();
-        switch (ch) {
-            case 1:
-                int selection;
-                do {
-                    System.out.println("Enter Name For Address Book");
-                    String AddressBookName = sc.next();
+		System.out.println("Select the Choice:\n1. Add Address Book \n2. Search City or State \n3.View details by city \n4.View details by state");
+		int ch = sc.nextInt();
+		switch (ch) {
+		case 1:
+			int selection;
+			do {
+				System.out.println("Enter Name For Address Book");
+				String AddressBookName = sc.next();
 //                contactsDetails.add(AddressBookName);
-                    if (hashmap.containsKey(AddressBookName)) {
-                        System.out.println("The AddressBook already contains");
-                        break;
-                    } else {
-                        ArrayList<Contact> contactDetails1 = new ArrayList<>();
-                        addressBook.menuChoose(addressBook, contactDetails1);
-                        hashmap.put(AddressBookName,contactDetails1);
-                    }
-                    System.out.println("AddressBook Added" + hashmap + " ");
-                    System.out.println("1. Add New Address Book \n2. Search Contact by City or State \n3. Exit");
-                    selection = sc.nextInt();
-                } while (selection == 1);
-            case 2:
-                System.out.println("Enter City or State name to search ");
-                String name = sc.next();
-                SearchInMultipleBook(name);
-                break;
-            default:
-        }
-    }
-	//Search person in a Multiple Address book.
-    private static List<Contact> SearchInMultipleBook(String name) {
-        for (Map.Entry<String, ArrayList<Contact>> entry : hashmap.entrySet()) {
-            for (Contact contacts : entry.getValue()) {
-                if (contacts.getCity().equals(name) || contacts.getState().equals(name)) {
-                    System.out.println("\nAddress Book Name :" + entry.getKey());
-                    System.out.println("First Name :" + contacts.getFirstName());
-                    System.out.println("Last Name :" + contacts.getLastName());
-                    System.out.println("Email-ID :" + contacts.getEmailID());
-                    System.out.println("Address :" + contacts.getAddress());
-                    System.out.println("City Name :" + contacts.getCity());
-                    System.out.println("Contact Number :" + contacts.getPhoneNumber());
-                }
-            }
-        }
-        System.out.printf("No record found:");
-        return null;
-    }
+				if (hashmap.containsKey(AddressBookName)) {
+					System.out.println("The AddressBook already contains");
+					break;
+				} else {
+					ArrayList<Contact> contactDetails1 = new ArrayList<>();
+					addressBook.menuChoose(addressBook, contactDetails1);
+					hashmap.put(AddressBookName, contactDetails1);
+				}
+				System.out.println("AddressBook Added" + hashmap + " ");
+				System.out.println("1. Add New Address Book \n2. Search Contact by City or State  \n3. Exit");
+				selection = sc.nextInt();
+			} while (selection == 1);
+		case 2:
+			System.out.println("Enter City or State name to search ");
+			String name = sc.next();
+			SearchInMultipleBook(name);
+			break;
+		case 3:
+			addressBook.searchByState();
+			break;
+		case 4:
+			addressBook.searchByCity();
+			break;
+		default:
+		}
+	}
+
+	// Search person in a Multiple Address book.
+	private static List<Contact> SearchInMultipleBook(String name) {
+		for (Map.Entry<String, ArrayList<Contact>> entry : hashmap.entrySet()) {
+			for (Contact contacts : entry.getValue()) {
+				if (contacts.getCity().equals(name) || contacts.getState().equals(name)) {
+					System.out.println("\nAddress Book Name :" + entry.getKey());
+					System.out.println("First Name :" + contacts.getFirstName());
+					System.out.println("Last Name :" + contacts.getLastName());
+					System.out.println("Email-ID :" + contacts.getEmailID());
+					System.out.println("Address :" + contacts.getAddress());
+					System.out.println("City Name :" + contacts.getCity());
+					System.out.println("Contact Number :" + contacts.getPhoneNumber());
+				}
+			}
+		}
+		System.out.printf("No record found:");
+		return null;
+	}
+
+	public void SearchInSingleBook(ArrayList<Contact> contactdetails) {
+		System.out.println("Enter name of city or state to search");
+		String name = sc.next();
+		ArrayList<Contact> contacts = new ArrayList<>();
+		for (Contact contact : contactdetails) {
+			if (contact.getCity().equals(name) || contact.getState().equals(name)) {
+				contacts.add(contact);
+			}
+			System.out.println(contact);
+		}
+	}
+
+	// Using Java Stream
+	public void searchByCity() {
+		System.out.println("Enter the city:");
+		String city = sc.next();
+		contactDetails.stream().filter(contacts -> contacts.getCity().equalsIgnoreCase(city))
+				.forEach(contacts -> System.out.println(contacts));
+	}
+
+	public void searchByState() {
+		System.out.println("Enter the State:");
+		String state = sc.next();
+		contactDetails.stream().filter(contacts -> contacts.getState().equalsIgnoreCase(state))
+				.forEach(contacts -> System.out.println(contacts));
+	}
+
 	/*
 	 * Create addDetails method create info contact Class object
 	 */
