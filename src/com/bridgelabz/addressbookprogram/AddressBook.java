@@ -17,7 +17,8 @@ public class AddressBook {
 
 	// method For Adding Multiple Address Book
 	public static void multipleAddressBook(AddressBook addressBook) {
-		System.out.println("Select the Choice:\n1. Add Address Book \n2. Search City or State \n3.View details by city \n4.View details by state");
+		System.out.println(
+				"Select the Choice:\n1. Add Address Book \n2. Search City or State \n3. Count by City\n4. Count by State");
 		int ch = sc.nextInt();
 		switch (ch) {
 		case 1:
@@ -97,6 +98,24 @@ public class AddressBook {
 		String state = sc.next();
 		contactDetails.stream().filter(contacts -> contacts.getState().equalsIgnoreCase(state))
 				.forEach(contacts -> System.out.println(contacts));
+	}
+
+	public void countByCity() {
+		System.out.println("Enter the city Name:");
+		String city = sc.next();
+		contactDetails.stream().filter(contacts -> contacts.getCity().equalsIgnoreCase(city))
+				.forEach(contacts -> System.out.println(contacts));
+		long count = contactDetails.stream().filter(n -> n.getCity().equalsIgnoreCase(city)).count();
+		System.out.println("Total number of Persons in city " + city + ":" + count);
+	}
+
+	public void countByState() {
+		System.out.println("Enter the State Name:");
+		String state = sc.next();
+		contactDetails.stream().filter(contacts -> contacts.getState().equalsIgnoreCase(state))
+				.forEach(contacts -> System.out.println(contacts));
+		long count = contactDetails.stream().filter(n -> n.getState().equalsIgnoreCase(state)).count();
+		System.out.println("Total number of Persons in city " + state + ":" + count);
 	}
 
 	/*
